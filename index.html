@@ -49,11 +49,12 @@
 </head>
 <body>
 
-<header>
+<header id="top">
   <nav aria-label="Main navigation">
     <a href="#top" class="brand">
       <img src="images/logo.png" alt="Freeloan India logo" style="height:46px;width:auto;">
       <span class="brand-text">
+        <span class="name">Freeloan India</span>
         <span class="tag">ADVOCATE-LED RESOLUTION</span>
       </span>
     </a>
@@ -63,13 +64,14 @@
       <a href="#how">How it works</a>
       <a href="#reviews">Testimonials</a>
       <a href="#book">Contact</a>
-      <a href="#bookCard" class="nav-cta mobile-only">Book an Appointment</a>
     </div>
-    <a href="#bookCard" class="nav-cta desktop-only">Book an Appointment</a>
+    <a href="#bookCard" class="nav-cta nav-booking desktop-only" aria-label="Book an appointment">
+      <span class="desktop-cta-label">Book an Appointment</span>
+      <span class="mobile-cta-label" aria-hidden="true">Book now</span>
+    </a>
   </nav>
 </header>
 
-<div id="top"></div>
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
@@ -88,8 +90,11 @@
     </div>
 
     <div class="book-card" id="bookCard">
-      <h3>Book an appointment</h3>
-      <p>Share a few details. We reply on WhatsApp or email, usually within a few hours.</p>
+      <div class="book-heading">
+        <span class="book-eyebrow"><span class="book-status-dot"></span> PRIVATE &amp; CONFIDENTIAL</span>
+        <h3>Book an appointment</h3>
+        <p>Tell us a little about your situation. Choose WhatsApp or email, and we’ll get back to you.</p>
+      </div>
       <form id="apptForm" novalidate>
         <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1" autocomplete="off">
         <div class="field">
@@ -284,44 +289,82 @@
 
 <section class="testimonials" id="reviews">
   <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">In their words</div>
-      <h2>Calm, after the storm of calls</h2>
-    </div>
-    <div class="t-grid">
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"I had a lot of debt due to financial issues and pressure from recovery agents. After consulting Advocate Joshi, I felt relaxed — she handled all my calls and bank notices excellently. Now I'm confident dealing with any agent."</p>
-        <b>Achintya N.</b><span>Verified client</span>
-      </div>
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"Advocate Joshi guided me through the entire process, offering reassurance when I needed it most. Her professionalism in handling recovery agents was outstanding. I highly recommend her to anyone seeking a results-driven advocate."</p>
-        <b>Akkshay P.</b><span>Verified client</span>
-      </div>
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"Your professionalism, expertise and unwavering dedication to my case made a profound impact. Your communication skills simplified the legal process, and your prompt, clear responses were invaluable."</p>
-        <b>Ameya O.</b><span>Verified client</span>
-      </div>
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"I approached Advocate Joshi for a personal loan recovery matter and am extremely satisfied with the outcome. Her approach was respectful and balanced — firm when needed, but always fair. She helped me recover my dues smoothly."</p>
-        <b>Dhrumil S.</b><span>Verified client</span>
-      </div>
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"Advocate Joshi and her team handled communication with the banks so effectively regarding my delayed EMI payment. Their support was a huge relief during a stressful time — it felt like I was in good hands."</p>
-        <b>Avishek B.</b><span>Verified client</span>
-      </div>
-      <div class="t-card">
-        <div class="stars">★★★★★</div>
-        <p>"3 of my loans have already been settled, and settlement talks are underway for the remaining two — a huge relief after months of struggle."</p>
-        <b>Mohd Arshad</b><span>Verified client</span>
+    <div class="testimonial-heading">
+      <div class="section-head">
+        <div class="kicker">In their words</div>
+        <h2>Calm, after the storm of calls</h2>
+        <p class="testimonial-intro">Hear from people who found guidance and support when they needed it.</p>
       </div>
     </div>
+    <p class="testimonial-hint">Select a quote to read it in full · Swipe to explore</p>
+    <div class="testimonial-carousel">
+      <button class="testimonial-arrow" type="button" data-direction="previous" aria-label="Previous testimonials">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="testimonial-viewport" aria-label="Client testimonials" tabindex="0">
+        <div class="t-grid">
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Achintya N.'s full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">I felt relaxed and confident dealing with any agent.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"I had a lot of debt due to financial issues and pressure from recovery agents. After consulting Advocate Joshi, I felt relaxed — she handled all my calls and bank notices excellently. Now I'm confident dealing with any agent."</p><b>Achintya N.</b><span>Verified client</span></div>
+        </article>
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Akkshay P.'s full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">Her guidance and reassurance made all the difference.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Advocate Joshi guided me through the entire process, offering reassurance when I needed it most. Her professionalism in handling recovery agents was outstanding. I highly recommend her to anyone seeking a results-driven advocate."</p><b>Akkshay P.</b><span>Verified client</span></div>
+        </article>
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Ameya O.'s full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">The legal process felt simpler, clearer and more human.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Your professionalism, expertise and unwavering dedication to my case made a profound impact. Your communication skills simplified the legal process, and your prompt, clear responses were invaluable."</p><b>Ameya O.</b><span>Verified client</span></div>
+        </article>
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Dhrumil S.'s full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">Respectful and balanced support through a difficult matter.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"I approached Advocate Joshi for a personal loan recovery matter and am extremely satisfied with the outcome. Her approach was respectful and balanced — firm when needed, but always fair. She helped me recover my dues smoothly."</p><b>Dhrumil S.</b><span>Verified client</span></div>
+        </article>
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Avishek B.'s full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">Their support was a huge relief during a stressful time.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Advocate Joshi and her team handled communication with the banks so effectively regarding my delayed EMI payment. Their support was a huge relief during a stressful time — it felt like I was in good hands."</p><b>Avishek B.</b><span>Verified client</span></div>
+        </article>
+        <article class="t-card">
+          <button class="t-art-button" type="button" aria-label="Read Mohd Arshad's full testimonial">
+            <span class="testimonial-art" aria-hidden="true"><span class="art-mark">“</span><span class="art-stars">★★★★★</span><span class="art-quote">Three loans settled. A huge relief after months of struggle.</span><span class="art-rule"></span><span class="art-caption">A CLIENT'S WORDS</span></span>
+            <span class="art-open">Tap to read</span>
+          </button>
+          <div class="t-copy"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"3 of my loans have already been settled, and settlement talks are underway for the remaining two — a huge relief after months of struggle."</p><b>Mohd Arshad</b><span>Verified client</span></div>
+        </article>
+        </div>
+      </div>
+      <button class="testimonial-arrow" type="button" data-direction="next" aria-label="Next testimonials">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+    <p class="testimonial-status" aria-live="polite"></p>
   </div>
 </section>
+
+<dialog class="testimonial-dialog" aria-labelledby="testimonial-dialog-name">
+  <button class="testimonial-close" type="button" aria-label="Close testimonial">×</button>
+  <div class="testimonial-dialog-art" aria-hidden="true"></div>
+  <div class="testimonial-dialog-copy">
+    <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+    <p class="testimonial-dialog-quote"></p>
+    <b id="testimonial-dialog-name"></b>
+    <span>Verified client</span>
+  </div>
+</dialog>
 
 <section id="faq">
   <div class="wrap">

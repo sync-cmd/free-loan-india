@@ -72,12 +72,190 @@ ${issue}`;
 
 // FAQ accordion
 document.querySelectorAll('.faq-item').forEach(item => {
-  item.querySelector('.faq-q').addEventListener('click', () => {
+  const question = item.querySelector('.faq-q');
+  const answer = item.querySelector('.faq-a');
+  const answerId = `faq-answer-${Array.from(item.parentElement.children).indexOf(item) + 1}`;
+  answer.id = answerId;
+  question.setAttribute('aria-controls', answerId);
+  question.setAttribute('aria-expanded', 'false');
+
+  question.addEventListener('click', () => {
     const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if(!isOpen) item.classList.add('open');
+    document.querySelectorAll('.faq-item').forEach(faqItem => {
+      faqItem.classList.remove('open');
+      faqItem.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      question.setAttribute('aria-expanded', 'true');
+    }
   });
 });
+
+// Explicitly align the booking card near the top, even when it is already
+// partly visible in the mobile hero.
+document.querySelectorAll('a[href="#bookCard"]').forEach(link => {
+  link.addEventListener('click', event => {
+    const bookingCard = document.getElementById('bookCard');
+    if (!bookingCard) return;
+
+    event.preventDefault();
+    history.pushState(null, '', '#bookCard');
+    window.scrollTo({
+      top: Math.max(0, window.scrollY + bookingCard.getBoundingClientRect().top - 24),
+      behavior: 'instant',
+    });
+  });
+});
+
+document.querySelectorAll('a[href="#top"]').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    history.pushState(null, '', '#top');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+});
+
+// Testimonials carousel
+const testimonialViewport = document.querySelector('.testimonial-viewport');
+const testimonialTrack = testimonialViewport?.querySelector('.t-grid');
+const testimonialCards = testimonialTrack ? Array.from(testimonialTrack.children) : [];
+const testimonialDialog = document.querySelector('.testimonial-dialog');
+const testimonialStatus = document.querySelector('.testimonial-status');
+
+if (testimonialViewport && testimonialTrack && testimonialCards.length > 1 && testimonialDialog) {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const closeButton = testimonialDialog.querySelector('.testimonial-close');
+  const modalArt = testimonialDialog.querySelector('.testimonial-dialog-art');
+  const modalQuote = testimonialDialog.querySelector('.testimonial-dialog-quote');
+  const modalName = testimonialDialog.querySelector('#testimonial-dialog-name');
+  let cycleWidth = 0;
+  let offset = 0;
+  let lastFrame = 0;
+  let pointerStart = null;
+  let dragged = false;
+  let suppressClick = false;
+  let lastFocusedButton = null;
+
+  const measureCycle = () => {
+    const gap = parseFloat(getComputedStyle(testimonialTrack).columnGap) || 0;
+    cycleWidth = testimonialCards.reduce((width, card) => width + card.getBoundingClientRect().width, 0)
+      + gap * testimonialCards.length;
+    if (cycleWidth > 0) {
+      offset %= cycleWidth;
+      testimonialTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+    }
+  };
+
+  testimonialCards.forEach((card, index) => {
+    card.dataset.testimonialIndex = String(index);
+    const clone = card.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelector('.t-art-button').tabIndex = -1;
+    testimonialTrack.append(clone);
+  });
+
+  const isPaused = () => reducedMotion.matches
+    || document.hidden
+    || testimonialDialog.open;
+
+  const animate = timestamp => {
+    if (isPaused()) {
+      lastFrame = 0;
+    } else if (cycleWidth > 0) {
+      if (lastFrame) offset = (offset + Math.min(timestamp - lastFrame, 80) * 0.024) % cycleWidth;
+      testimonialTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+      lastFrame = timestamp;
+    }
+    window.requestAnimationFrame(animate);
+  };
+
+  const moveByCard = direction => {
+    const gap = parseFloat(getComputedStyle(testimonialTrack).columnGap) || 0;
+    offset = (offset + direction * (testimonialCards[0].getBoundingClientRect().width + gap) + cycleWidth) % cycleWidth;
+    testimonialTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+    lastFrame = 0;
+  };
+
+  document.querySelectorAll('.testimonial-arrow').forEach(button => {
+    button.addEventListener('click', () => moveByCard(button.dataset.direction === 'next' ? 1 : -1));
+  });
+
+  testimonialViewport.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || testimonialDialog.open) return;
+    pointerStart = { x: event.clientX, offset, pointerId: event.pointerId };
+    dragged = false;
+    lastFrame = 0;
+  });
+
+  document.addEventListener('pointermove', event => {
+    if (!pointerStart || event.pointerId !== pointerStart.pointerId) return;
+    const distance = event.clientX - pointerStart.x;
+    if (Math.abs(distance) > 5) dragged = true;
+    if (dragged && cycleWidth > 0) {
+      offset = (pointerStart.offset - distance + cycleWidth) % cycleWidth;
+      testimonialTrack.style.transform = `translate3d(${-offset}px, 0, 0)`;
+    }
+  });
+
+  const endPointer = event => {
+    if (!pointerStart || event.pointerId !== pointerStart.pointerId) return;
+    pointerStart = null;
+    if (dragged) {
+      suppressClick = true;
+      window.setTimeout(() => { suppressClick = false; }, 0);
+    }
+    lastFrame = 0;
+  };
+
+  document.addEventListener('pointerup', endPointer);
+  document.addEventListener('pointercancel', endPointer);
+  testimonialViewport.addEventListener('click', event => {
+    if (suppressClick) {
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClick = false;
+    }
+  }, true);
+
+  testimonialViewport.addEventListener('click', event => {
+    const button = event.target.closest('.t-art-button');
+    if (!button) return;
+    const card = button.closest('.t-card');
+
+    const quote = card.querySelector('.t-copy p').textContent.trim();
+    const name = card.querySelector('.t-copy b').textContent.trim();
+    const art = card.querySelector('.testimonial-art').cloneNode(true);
+    art.removeAttribute('aria-hidden');
+    modalArt.replaceChildren(art);
+    modalQuote.textContent = quote;
+    modalName.textContent = name;
+    const sourceCard = testimonialCards[Number(card.dataset.testimonialIndex)];
+    lastFocusedButton = sourceCard.querySelector('.t-art-button');
+    testimonialDialog.showModal();
+    closeButton.focus();
+  });
+
+  closeButton.addEventListener('click', () => testimonialDialog.close());
+  testimonialDialog.addEventListener('click', event => {
+    if (event.target === testimonialDialog) testimonialDialog.close();
+  });
+  testimonialDialog.addEventListener('close', () => {
+    if (lastFocusedButton?.isConnected) lastFocusedButton.focus();
+  });
+  document.querySelectorAll('.testimonial-arrow').forEach(button => {
+    button.addEventListener('click', () => {
+      if (testimonialStatus) testimonialStatus.textContent = 'Testimonials moved.';
+    });
+  });
+  reducedMotion.addEventListener('change', event => {
+    if (!event.matches) lastFrame = 0;
+  });
+  window.addEventListener('resize', measureCycle, { passive: true });
+
+  measureCycle();
+  window.requestAnimationFrame(animate);
+}
 
 // Mobile navigation
 const menuButton = document.querySelector('.burger');
@@ -111,6 +289,10 @@ if (menuButton && primaryNavigation) {
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       closeNavigation();
+      if (testimonialDialog?.open) {
+        testimonialDialog.close();
+        return;
+      }
       menuButton.focus();
     }
   });
